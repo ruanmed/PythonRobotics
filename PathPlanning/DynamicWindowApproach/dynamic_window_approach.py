@@ -177,25 +177,40 @@ def plot_arrow(x, y, yaw, length=0.5, width=0.1):  # pragma: no cover
               head_length=width, head_width=width)
     plt.plot(x, y)
 
+def create_square(dx, dy, px, py):
+    # Cria um vetor descrevendo um quadrado com tamanho dx * dy na posição (px, py)
+    square = []
+    for x in range(dx):
+        square.append([px + x,       py + 0.0])
+        square.append([px + x,       py + dy])
+        square.append([px + x + 0.5, py + 0.0])
+        square.append([px + x + 0.5, py + dy])
+    for y in range(dy):
+        square.append([px + 0.0,    py + y])
+        square.append([px + dx,     py + y])
+        square.append([px + 0.0,    py + y + 0.5])
+        square.append([px + dx,     py + y + 0.5])
+    square.append([px + dx,     py + dy])
 
-def main(gx=10, gy=10):
+    return square
+a = [[1,2]]
+a = create_square(21, 16, 0, 0.0)
+a = a + create_square(2, 5, 4.0, 0.0)
+a = a + create_square(2, 5, 4.0, 11.0)
+a = a + create_square(2, 5, 9.0, 0.0)
+a = a + create_square(2, 5, 9.0, 11.0)
+a = a + create_square(2, 5, 14.0, 0.0)
+# a = a + create_square(2, 5, 9.0, 11.0)
+
+
+def main(gx=2, gy=13):
     print(__file__ + " start!!")
     # initial state [x(m), y(m), yaw(rad), v(m/s), omega(rad/s)]
-    x = np.array([0.0, 0.0, math.pi / 8.0, 0.0, 0.0])
+    x = np.array([18, 1.0, math.pi / 8.0, 0.5, 0.5])
     # goal position [x(m), y(m)]
     goal = np.array([gx, gy])
     # obstacles [x(m) y(m), ....]
-    ob = np.array([[-1, -1],
-                   [0, 2],
-                   [4.0, 2.0],
-                   [5.0, 4.0],
-                   [5.0, 5.0],
-                   [5.0, 6.0],
-                   [5.0, 9.0],
-                   [8.0, 9.0],
-                   [7.0, 9.0],
-                   [12.0, 12.0]
-                   ])
+    ob = np.array(a)
 
     # input [forward speed, yawrate]
     u = np.array([0.0, 0.0])
@@ -213,11 +228,11 @@ def main(gx=10, gy=10):
             plt.plot(ptraj[:, 0], ptraj[:, 1], "-g")
             plt.plot(x[0], x[1], "xr")
             plt.plot(goal[0], goal[1], "xb")
-            plt.plot(ob[:, 0], ob[:, 1], "ok")
+            plt.plot(ob[:, 0], ob[:, 1], "ok", marker=".")
             plot_arrow(x[0], x[1], x[2])
             plt.axis("equal")
-            plt.grid(True)
-            plt.pause(0.0001)
+            plt.grid(False)
+            plt.pause(0.001)
 
         # check reaching goal
         dist_to_goal = math.sqrt((x[0] - goal[0])**2 + (x[1] - goal[1])**2)  

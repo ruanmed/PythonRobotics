@@ -138,19 +138,54 @@ def draw_heatmap(data):
     data = np.array(data).T
     plt.pcolor(data, vmax=100.0, cmap=plt.cm.Blues)
 
+def create_square(dx, dy, px, py):
+    # Cria um vetor descrevendo um quadrado com tamanho dx * dy na posição (px, py)
+    ox, oy = [], []
+    for x in range(dx):
+        ox.append(px + x)
+        ox.append(px + x)
+        ox.append(px + x + 0.5)
+        ox.append(px + x + 0.5) 
+        oy.append(py + 0.0)
+        oy.append(py + dy)
+        oy.append(py + 0.0)
+        oy.append(py + dy)
+    for y in range(dy):
+        ox.append(px + 0.0)
+        ox.append(px + dx)
+        ox.append(px + 0.0)
+        ox.append(px + dx) 
+        oy.append(py + y)
+        oy.append(py + y)
+        oy.append(py + y + 0.5)
+        oy.append(py + y + 0.5)
+    ox.append(px + dx) 
+    oy.append(py + dy)
+
+    return ox, oy
 
 def main():
     print("potential_field_planning start")
 
-    sx = 0.0  # start x position [m]
-    sy = 10.0  # start y positon [m]
-    gx = 30.0  # goal x position [m]
-    gy = 30.0  # goal y position [m]
+    sx = 35.0  # start x position [m]
+    sy = 25.0  # start y positon [m]
+    gx = 4.0  # goal x position [m]
+    gy = 4.0  # goal y position [m]
     grid_size = 0.5  # potential grid size [m]
-    robot_radius = 5.0  # robot radius [m]
-
-    ox = [15.0, 5.0, 20.0, 25.0]  # obstacle x position list [m]
-    oy = [25.0, 15.0, 26.0, 25.0]  # obstacle y position list [m]
+    robot_radius = 3.0  # robot radius [m]
+    ox, oy = create_square(41, 31, 0, 0.0)
+    ox1, oy1 = create_square(4, 10, 8.0, 0.0)
+    ox, oy = ox + ox1, oy + oy1
+    ox1, oy1 = create_square(4, 10, 8.0, 20.0)
+    ox, oy = ox + ox1, oy + oy1
+    ox1, oy1 = create_square(4, 10, 18.0, 0.0)
+    ox, oy = ox + ox1, oy + oy1
+    ox1, oy1 = create_square(4, 10, 18.0, 20.0)
+    ox, oy = ox + ox1, oy + oy1
+    ox1, oy1 = create_square(4, 10, 28.0, 0.0)
+    ox, oy = ox + ox1, oy + oy1
+    # ox = [15.0, 5.0, 20.0, 25.0]  # obstacle x position list [m]
+    # oy = [25.0, 15.0, 26.0, 25.0]  # obstacle y position list [m]
 
     if show_animation:
         plt.grid(True)
